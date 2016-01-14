@@ -7,10 +7,19 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import composite.khoaha.com.demo_commandpatternapplying.command.ChangeAlphaCommand;
+import composite.khoaha.com.demo_commandpatternapplying.command.Command;
 import composite.khoaha.com.demo_commandpatternapplying.invoker.Invoker;
 import composite.khoaha.com.demo_commandpatternapplying.receiver.ImageReceiver;
 
@@ -20,16 +29,15 @@ public class ExecutionActivity extends AppCompatActivity {
     @Bind(R.id.ivImage)
     ImageView ivImage;
 
-    public static Intent createIntent(Context context, ChangeAlphaCommand command) {
+    public static Intent createIntent(Context context) {
         Intent intent = new Intent(context, ExecutionActivity.class);
-        Bundle params = new Bundle();
-        params.putSerializable(COMMAND, command);
-        intent.putExtras(params);
         return intent;
     }
 
     ImageReceiver imageReceiver;
     Invoker invoker;
+
+    ArrayList<Command> commands = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +45,40 @@ public class ExecutionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_execution);
         ButterKnife.bind(this);
 
-        final ChangeAlphaCommand command = (ChangeAlphaCommand) getIntent().getExtras().getSerializable(COMMAND);
+        imageReceiver = new ImageReceiver(ivImage);
+        invoker = new Invoker();
 
-        if (command != null) {
-            imageReceiver = new ImageReceiver(ivImage);
-            command.setReceiver(imageReceiver);
+        //get macro from file
+        try {
+            FileInputStream fis = new FileInputStream(MyCons.path);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            commands = (ArrayList<Command>) ois.readObject();
 
-            invoker = new Invoker();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (final Command cmd : commands) {
+                        cmd.setReceiver(imageReceiver);
+
+                        //sleep 1s
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        //execute command
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cmd.execute();
+                            }
+                        });
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            Log.e(MyCons.LOG, "MainActivity.sayHi" + e.getMessage());
         }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                invoker.addCommand(command);
-            }
-        }, 1000);
     }
 }
