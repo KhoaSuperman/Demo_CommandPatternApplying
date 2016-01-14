@@ -42,7 +42,11 @@ public class ChangeAlphaCommand implements Command,
     @Override
     public void setReceiver(Receiver receiver) {
         this.imageReceiver = (ImageReceiver) receiver;
+    }
 
+    @Override
+    public String toString() {
+        return alpha > 0 ? "Alpha Up" : "Alpha Down";
     }
 
     protected ChangeAlphaCommand(Parcel in) {

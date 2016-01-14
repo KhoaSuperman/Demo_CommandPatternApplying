@@ -29,7 +29,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
-        String history = (position + 1) + " - " + hisStrings.get(position);
+        //TODO: display name of action with its id or number
+        String history = hisStrings.get(position);
         holder.tvHistory.setText(history);
     }
 

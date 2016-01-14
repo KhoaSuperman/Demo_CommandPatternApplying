@@ -10,12 +10,36 @@ import composite.khoaha.com.demo_commandpatternapplying.command.Command;
  * Created by HoangAnhKhoa on 1/14/16.
  */
 public class Invoker {
-    Deque<Command> queueUndo = new LinkedList<>();
-    Deque<Command> queueRedo = new LinkedList<>();
+    private Deque<Command> queueUndo = new LinkedList<>();
+    private Deque<Command> queueRedo = new LinkedList<>();
+    //for display
+    ArrayList<String> historyList = new ArrayList<>();
+
+    private InvokerListener invokerListener;
+
+    public Invoker() {
+        invokerListener = new InvokerListener() {
+            @Override
+            public void commandAdded() {
+
+            }
+
+            @Override
+            public void commandRemoved() {
+
+            }
+        };
+    }
 
     public void addCommand(Command command) {
         queueUndo.addFirst(command);
         command.execute();
+
+        //add to history text
+        historyList.add(0, command.toString());
+
+        //raise callback
+        invokerListener.commandAdded();
     }
 
     public void undo() {
@@ -25,16 +49,42 @@ public class Invoker {
 
             //add to redo list
             queueRedo.addFirst(lastCommand);
+
+            //remove history
+            historyList.remove(0);
+
+            //raise callback
+            invokerListener.commandRemoved();
         }
     }
 
     public void redo() {
-        if(queueRedo.size() > 0){
+        if (queueRedo.size() > 0) {
             Command command = queueRedo.pollFirst();
             command.redo();
 
             //add back to undo list
             queueUndo.addFirst(command);
+
+            //re-add to history
+            historyList.add(0, command.toString());
+
+            //raise callback
+            invokerListener.commandAdded();
         }
+    }
+
+    public void setInvokerListener(InvokerListener invokerListener) {
+        this.invokerListener = invokerListener;
+    }
+
+    public ArrayList<String> getHistoryList() {
+        return historyList;
+    }
+
+    public interface InvokerListener {
+        void commandAdded();
+
+        void commandRemoved();
     }
 }

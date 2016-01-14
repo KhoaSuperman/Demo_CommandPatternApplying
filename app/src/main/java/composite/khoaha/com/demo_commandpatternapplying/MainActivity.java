@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
     static final float ALPHA_STEP = 0.1f;
 
     HistoryAdapter adapter;
-    ArrayList<String> textHistorys = new ArrayList<>();
+    ArrayList<String> textHistorys;
 
     ImageReceiver imageReceiver;
-    Invoker invoker;
+    Invoker invoker = new Invoker();
     @Bind(R.id.tvAlpha)
     TextView tvAlpha;
 
@@ -57,12 +57,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        //list history
         rvHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        textHistorys = invoker.getHistoryList();
         adapter = new HistoryAdapter(textHistorys);
         rvHistory.setAdapter(adapter);
 
+        //image receiver
         imageReceiver = new ImageReceiver(ivImage);
-        invoker = new Invoker();
+
+        //callback when history changed
+        invoker.setInvokerListener(new Invoker.InvokerListener() {
+            @Override
+            public void commandAdded() {
+                adapter.notifyItemInserted(0);
+            }
+
+            @Override
+            public void commandRemoved() {
+                adapter.notifyItemRemoved(0);
+            }
+        });
     }
 
     @OnClick({R.id.btnAlphaUp, R.id.btnAlphaDown, R.id.btnRedo, R.id.btnUndo})
@@ -88,13 +103,5 @@ public class MainActivity extends AppCompatActivity {
     void doChangeAlpha(float alpha) {
         ChangeAlphaCommand command = new ChangeAlphaCommand(imageReceiver, alpha);
         invoker.addCommand(command);
-
-//        Intent intent = ExecutionActivity.createIntent(this, command);
-//        startActivity(intent);
-
-        //add action to list history
-        String textHistory = alpha > 0 ? "Alpha Up" : "Alpha Down";
-        textHistorys.add(textHistory);
-        adapter.notifyItemInserted(textHistorys.size() - 1);
     }
 }
