@@ -5,7 +5,7 @@ import android.widget.ImageView;
 /**
  * Created by HoangAnhKhoa on 1/14/16.
  */
-public class ImageReceiver {
+public class ImageReceiver extends Receiver {
 
     ImageView imageView;
 

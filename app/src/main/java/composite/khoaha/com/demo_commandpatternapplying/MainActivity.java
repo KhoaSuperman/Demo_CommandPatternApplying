@@ -80,7 +80,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void doChangeAlpha(float alpha) {
-        invoker.addCommand(new ChangeAlphaCommand(imageReceiver, alpha));
+        ChangeAlphaCommand command = new ChangeAlphaCommand(imageReceiver, alpha);
+        invoker.addCommand(command);
+
+        Intent intent = ExecutionActivity.createIntent(this, command);
+        startActivity(intent);
 
         //add action to list history
         String textHistory = alpha > 0 ? "Alpha Up" : "Alpha Down";
