@@ -3,31 +3,28 @@ package composite.khoaha.com.demo_commandpatternapplying;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import composite.khoaha.com.demo_commandpatternapplying.command.ChangeAlphaCommand;
 import composite.khoaha.com.demo_commandpatternapplying.command.Command;
 import composite.khoaha.com.demo_commandpatternapplying.invoker.Invoker;
 import composite.khoaha.com.demo_commandpatternapplying.receiver.ImageReceiver;
 
 public class ExecutionActivity extends AppCompatActivity {
 
-    static final String COMMAND = "command";
     @Bind(R.id.ivImage)
     ImageView ivImage;
+    @Bind(R.id.tvAlpha)
+    TextView tvAlpha;
 
     public static Intent createIntent(Context context) {
         Intent intent = new Intent(context, ExecutionActivity.class);
@@ -72,6 +69,7 @@ public class ExecutionActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 cmd.execute();
+                                tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()));
                             }
                         });
                     }

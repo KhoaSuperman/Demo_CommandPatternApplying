@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     oos.flush();
                     oos.close();
 
-                    Toast.makeText(getBaseContext(), "Save Macro success!¬", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Save Macro success!", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Log.e(MyCons.LOG, "MainActivity.sayHi" + e.getMessage());
                 }
