@@ -14,6 +14,8 @@ public class Invoker {
     private Deque<Command> queueRedo = new LinkedList<>();
     //for display
     ArrayList<String> historyList = new ArrayList<>();
+    //for create macro
+    ArrayList<Command> commands =  new ArrayList<>();
 
     private InvokerListener invokerListener;
 
@@ -38,6 +40,9 @@ public class Invoker {
         //add to history text
         historyList.add(0, command.toString());
 
+        //add to command list
+        commands.add(command);
+
         //raise callback
         invokerListener.commandAdded();
     }
@@ -52,6 +57,9 @@ public class Invoker {
 
             //remove history
             historyList.remove(0);
+
+            //remove from command list
+            commands.remove(commands.size() - 1);
 
             //raise callback
             invokerListener.commandRemoved();
@@ -69,6 +77,9 @@ public class Invoker {
             //re-add to history
             historyList.add(0, command.toString());
 
+            //re-add to command list
+            commands.add(command);
+
             //raise callback
             invokerListener.commandAdded();
         }
@@ -80,6 +91,10 @@ public class Invoker {
 
     public ArrayList<String> getHistoryList() {
         return historyList;
+    }
+
+    public ArrayList<Command> getCommands() {
+        return commands;
     }
 
     public interface InvokerListener {
