@@ -11,9 +11,12 @@ import composite.khoaha.com.demo_commandpatternapplying.receiver.Receiver;
 /**
  * Created by HoangAnhKhoa on 1/14/16.
  */
-public class ChangeAlphaCommand implements Command, Parcelable {
+public class ChangeAlphaCommand implements Command,
+        Parcelable,//for transfer command between 2 activities
+        Serializable //for persistent command to file
+{
 
-    ImageReceiver imageReceiver;
+    transient ImageReceiver imageReceiver;
     float alpha;
 
     public ChangeAlphaCommand(ImageReceiver imageReceiver, float alpha) {

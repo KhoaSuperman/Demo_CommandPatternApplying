@@ -23,7 +23,7 @@ public class ExecutionActivity extends AppCompatActivity {
     public static Intent createIntent(Context context, ChangeAlphaCommand command) {
         Intent intent = new Intent(context, ExecutionActivity.class);
         Bundle params = new Bundle();
-        params.putParcelable(COMMAND, command);
+        params.putSerializable(COMMAND, command);
         intent.putExtras(params);
         return intent;
     }
@@ -37,7 +37,7 @@ public class ExecutionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_execution);
         ButterKnife.bind(this);
 
-        final ChangeAlphaCommand command = getIntent().getExtras().getParcelable(COMMAND);
+        final ChangeAlphaCommand command = (ChangeAlphaCommand) getIntent().getExtras().getSerializable(COMMAND);
 
         if (command != null) {
             imageReceiver = new ImageReceiver(ivImage);
