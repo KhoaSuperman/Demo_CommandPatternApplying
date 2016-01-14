@@ -25,11 +25,12 @@
 
             <ImageView
                 android:id="@+id/ivImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:alpha="0.5"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:src="@mipmap/super_man" />
+                android:src="@mipmap/superman" />
 
             <LinearLayout
                 android:layout_width="match_parent"
