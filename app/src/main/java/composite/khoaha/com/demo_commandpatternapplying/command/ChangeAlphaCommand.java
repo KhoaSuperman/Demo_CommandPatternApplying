@@ -24,6 +24,27 @@ public class ChangeAlphaCommand implements Command,
         this.alpha = alpha;
     }
 
+    @Override
+    public void execute() {
+        imageReceiver.changeAlpha(alpha);
+    }
+
+    @Override
+    public void undo() {
+        imageReceiver.changeAlpha(-alpha);
+    }
+
+    @Override
+    public void redo() {
+        imageReceiver.changeAlpha(alpha);
+    }
+
+    @Override
+    public void setReceiver(Receiver receiver) {
+        this.imageReceiver = (ImageReceiver) receiver;
+
+    }
+
     protected ChangeAlphaCommand(Parcel in) {
         alpha = in.readFloat();
     }
@@ -39,17 +60,6 @@ public class ChangeAlphaCommand implements Command,
             return new ChangeAlphaCommand[size];
         }
     };
-
-    @Override
-    public void execute() {
-        imageReceiver.changeAlpha(alpha);
-    }
-
-    @Override
-    public void setReceiver(Receiver receiver) {
-        this.imageReceiver = (ImageReceiver) receiver;
-
-    }
 
     @Override
     public int describeContents() {

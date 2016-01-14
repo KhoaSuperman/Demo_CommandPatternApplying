@@ -27,16 +27,26 @@
                 android:id="@+id/ivImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:alpha="0.5"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:alpha="0.5"
                 android:src="@mipmap/superman" />
+
+            <TextView
+                android:id="@+id/tvAlpha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="0.5"
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivImage"
-                android:layout_marginTop="30dp"
+                android:layout_below="@+id/tvAlpha"
                 android:orientation="horizontal">
 
                 <Button

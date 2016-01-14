@@ -1,6 +1,5 @@
 package composite.khoaha.com.demo_commandpatternapplying;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     ImageReceiver imageReceiver;
     Invoker invoker;
+    @Bind(R.id.tvAlpha)
+    TextView tvAlpha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
     void sayHi(View view) {
         switch (view.getId()) {
             case R.id.btnUndo:
+                invoker.undo();
                 break;
             case R.id.btnRedo:
+                invoker.redo();
                 break;
             case R.id.btnAlphaDown:
                 doChangeAlpha(-ALPHA_STEP);
@@ -77,14 +81,16 @@ public class MainActivity extends AppCompatActivity {
                 doChangeAlpha(ALPHA_STEP);
                 break;
         }
+
+        tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()));
     }
 
     void doChangeAlpha(float alpha) {
         ChangeAlphaCommand command = new ChangeAlphaCommand(imageReceiver, alpha);
         invoker.addCommand(command);
 
-        Intent intent = ExecutionActivity.createIntent(this, command);
-        startActivity(intent);
+//        Intent intent = ExecutionActivity.createIntent(this, command);
+//        startActivity(intent);
 
         //add action to list history
         String textHistory = alpha > 0 ? "Alpha Up" : "Alpha Down";

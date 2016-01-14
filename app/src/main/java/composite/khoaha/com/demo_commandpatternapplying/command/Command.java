@@ -7,5 +7,7 @@ import composite.khoaha.com.demo_commandpatternapplying.receiver.Receiver;
  */
 public interface Command {
     void execute();
+    void undo();
+    void redo();
     void setReceiver(Receiver receiver);
 }
