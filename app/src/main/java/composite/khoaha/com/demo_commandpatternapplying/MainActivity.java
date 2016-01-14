@@ -1,5 +1,6 @@
 package composite.khoaha.com.demo_commandpatternapplying;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import composite.khoaha.com.demo_commandpatternapplying.command.ChangeAlphaCommand;
+import composite.khoaha.com.demo_commandpatternapplying.invoker.Invoker;
+import composite.khoaha.com.demo_commandpatternapplying.receiver.ImageReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     HistoryAdapter adapter;
     ArrayList<String> textHistorys = new ArrayList<>();
 
+    ImageReceiver imageReceiver;
+    Invoker invoker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         rvHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new HistoryAdapter(textHistorys);
         rvHistory.setAdapter(adapter);
+
+        imageReceiver = new ImageReceiver(ivImage);
+        invoker = new Invoker();
     }
 
     @OnClick({R.id.btnAlphaUp, R.id.btnAlphaDown, R.id.btnRedo, R.id.btnUndo})
@@ -70,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void doChangeAlpha(float alpha) {
-        float currentAlpha = ivImage.getAlpha();
-        currentAlpha += alpha;
-        ivImage.setAlpha(currentAlpha);
+        invoker.addCommand(new ChangeAlphaCommand(imageReceiver, alpha));
 
         //add action to list history
         String textHistory = alpha > 0 ? "Alpha Up" : "Alpha Down";
