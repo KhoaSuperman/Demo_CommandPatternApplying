@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/ivImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:alpha="0.5"
@@ -44,6 +44,7 @@
                 android:textSize="20sp" />
 
             <LinearLayout
+                android:id="@+id/section_change_alpha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvAlpha"
@@ -64,6 +65,33 @@
                     android:text="+" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/section_macro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/section_change_alpha"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSaveMacro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
+                    android:background="@android:color/holo_blue_light"
+                    android:text="Save Macro" />
+
+                <Button
+                    android:id="@+id/btnTestMacro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_dark"
+                    android:text="Test Macro" />
+            </LinearLayout>
+
 
         </RelativeLayout>
 
