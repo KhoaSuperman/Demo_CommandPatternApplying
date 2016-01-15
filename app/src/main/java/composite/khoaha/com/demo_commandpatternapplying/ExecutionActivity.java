@@ -69,7 +69,7 @@ public class ExecutionActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 cmd.execute();
-                                tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()));
+                                tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()) + " | Size " + imageReceiver.getSize() );
                             }
                         });
                     }
