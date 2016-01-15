@@ -2,7 +2,6 @@ package composite.khoaha.com.demo_commandpatternapplying;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,18 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import composite.khoaha.com.demo_commandpatternapplying.command.ChangeAlphaCommand;
+import composite.khoaha.com.demo_commandpatternapplying.command.ResizeCommand;
 import composite.khoaha.com.demo_commandpatternapplying.invoker.Invoker;
 import composite.khoaha.com.demo_commandpatternapplying.receiver.ImageReceiver;
 
@@ -60,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnTestMacro;
     @Bind(R.id.section_macro)
     LinearLayout sectionMacro;
+    @Bind(R.id.btnResize)
+    Button btnResize;
 
     static final float ALPHA_STEP = 0.1f;
 
@@ -68,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageReceiver imageReceiver;
     Invoker invoker = new Invoker();
+    int originalSize = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +96,12 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyItemRemoved(0);
             }
         });
+
+        //original size of image
+        invoker.addCommand(new ResizeCommand(imageReceiver, originalSize, originalSize));
     }
 
-    @OnClick({R.id.btnAlphaUp, R.id.btnAlphaDown, R.id.btnRedo, R.id.btnUndo, R.id.btnSaveMacro, R.id.btnTestMacro})
+    @OnClick({R.id.btnAlphaUp, R.id.btnAlphaDown, R.id.btnRedo, R.id.btnUndo, R.id.btnSaveMacro, R.id.btnTestMacro, R.id.btnResize})
     void sayHi(View view) {
         switch (view.getId()) {
             case R.id.btnUndo:
@@ -130,9 +133,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = ExecutionActivity.createIntent(this);
                 startActivity(intent);
                 break;
+            case R.id.btnResize:
+                int newSize = (new Random().nextInt(5) + 1 ) * 100;
+                invoker.addCommand(new ResizeCommand(imageReceiver, newSize, imageReceiver.getSize()));
+                break;
         }
 
-        tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()));
+        tvAlpha.setText(String.format("%.1f", ivImage.getAlpha()) +" | Size: "+ imageReceiver.getSize());
     }
 
     void doChangeAlpha(float alpha) {
